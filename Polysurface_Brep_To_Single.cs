@@ -584,7 +584,13 @@ public class Script_Instance : GH_ScriptInstance
 
     bool pass = bestDeviation <= targetTolModel && bestBoundaryDeviation <= boundaryTolModel;
 
-    UnifiedSurface = bestSurface;
+    NurbsSurface bestSurfaceWorld = bestSurface.DuplicateSurface() as NurbsSurface;
+    if (bestSurfaceWorld != null)
+      bestSurfaceWorld.Transform(toWorld);
+    else
+      bestSurface.Transform(toWorld);
+
+    UnifiedSurface = bestSurfaceWorld ?? bestSurface;
     ProxySurfaces = selectedFacesWorld;
     MaxDevMM = devMM;
     Passed = pass;
